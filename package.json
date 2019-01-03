@@ -1,0 +1,28 @@
+{
+  "name": "minid",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "browserify-fs": "^1.0.0",
+    "chai": "^4.2.0",
+    "doctests": "^1.0.1",
+    "empty-loader": "^1.0.1",
+    "faucet": "^0.0.1",
+    "hard-source-webpack-plugin": "^0.13.1",
+    "jest": "^23.6.0",
+    "jsdom": "^13.1.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^5.2.0",
+    "null-loader": "^0.1.1",
+    "prepack": "^0.2.54",
+    "shebang-loader": "^0.0.1",
+    "smokestack": "^3.6.0",
+    "tap-closer": "^1.0.0",
+    "tape": "^4.9.2",
+    "tape-run": "^5.0.0",
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.1.2",
+    "webpack-visualizer-plugin": "^0.1.11"
+  }
+}
