@@ -1,2 +1,4 @@
-export {Component, h, attach, detach, rerender} from './render.js';
-export {Store} from './store';
+export {h} from './src/tag.js';
+export {attach, detach, rerender} from './src/lifecycle.js';
+export {Component} from './src/component.js';
+export {Store} from './src/store';

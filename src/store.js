@@ -1,4 +1,4 @@
-import {rerender} from './render';
+import {rerender} from './lifecycle';
 
 export class Store {
     constructor (data = {}) {

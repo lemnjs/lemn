@@ -14,7 +14,7 @@ files.forEach(name => {
 
 const html = files.map(name => new HtmlWebpackPlugin({
     filename: `${name}.html`,
-    template: `${__dirname}/../index.html`,
+    template: `${__dirname}/index.html`,
     chunks: [name],
 }));
 

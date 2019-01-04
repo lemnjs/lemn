@@ -3,7 +3,7 @@ module.exports = {
     stats: 'none',
     entry: ['tape'],
     output: {
-        path: `${__dirname}/tmp/test`,
+        path: `${__dirname}/../tmp/test`,
         filename: 'dll.js',
         library: 'dll_tape',
         libraryTarget: 'var',
@@ -14,7 +14,7 @@ module.exports = {
     plugins: [
         new (require('webpack').DllPlugin)({
             name: 'dll_tape',
-            path: `${__dirname}/tmp/test/dll.json`,
+            path: `${__dirname}/../tmp/test/dll.json`,
         }),
     ],
 };
