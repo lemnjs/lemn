@@ -9,27 +9,30 @@ const files = fs.readdirSync(__dirname)
 
 const entry = {};
 files.forEach(name => {
-    entry[name] = `./${name}`;
+  entry[name] = `./${name}`;
 });
 
 const html = files.map(name => new HtmlWebpackPlugin({
-    filename: `${name}.html`,
-    template: `${__dirname}/index.html`,
-    chunks: [name],
+  filename: `${name}.html`,
+  template: `${__dirname}/index.html`,
+  chunks: [name],
 }));
 
 module.exports = {
-    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-    context: __dirname,
-    entry,
-    plugins: [
-        ...html,
-        new (require('webpack').DefinePlugin)({
-            process: {
-                env: {
-                    NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-                },
-            },
-        }),
-    ],
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  context: __dirname,
+  entry,
+  output: {
+    path: `${__dirname}/../dist/examples`,
+  },
+  plugins: [
+    ...html,
+    new (require('webpack').DefinePlugin)({
+      process: {
+        env: {
+          NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+        },
+      },
+    }),
+  ],
 };

@@ -9,12 +9,11 @@ module.exports = class LightBootstrapPlugin {
             const source = new ConcatSource();
             source.add('(function ([factory]) {');
             source.add(new OriginalSource([
-              'const __webpack_require__ = {r () {}, d (exports, name, getter) {Object.defineProperty(exports, {enumerable: false, get: getter});}};',
-              // 'const __webpack_require__ = function () {};',
-              // '__webpack_require__.r = __webpack_require__;',
-              // '__webpack_require__.d = function (exports, name, getter) {Object.defineProperty(exports, {enumerable: false, get: getter});};',
+              // 'const __webpack_require__ = {r () {}, d (exports, name, getter) {Object.defineProperty(exports, {enumerable: false, get: getter});}};',
+              'const __webpack_require__ = {r () {}, d (exports, name, getter) {exports[name] = getter;}};',
               'const exports = {};',
               'factory.call(exports, null, exports, __webpack_require__);',
+              'for (const key in exports) {exports[key] = exports[key]();}',
               'return exports;'
             ].join('\n'), 'cheap bootstrap'));
             source.add('})');

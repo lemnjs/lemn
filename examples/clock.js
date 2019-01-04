@@ -18,13 +18,13 @@ setInterval(() => store.set('time', new Date()), 87);
 
 class Clock extends Component {
     pad (n, fn) {
-        return store.connect('time', fn).connect(compare).connect(pad(n));
+        return store.to('time', fn).to(compare).to(pad(n));
     }
 
     render () {
-        const time = store.connect('time', i => i);
-        const pad2 = c => c.connect(d => d.toString().padStart(2, '0'));
-        const pad3 = c => c.connect(d => d.toString().padStart(3, '0'));
+        const time = store.to('time', i => i);
+        const pad2 = c => c.to(d => d.toString().padStart(2, '0'));
+        const pad3 = c => c.to(d => d.toString().padStart(3, '0'));
         return h`<div style="font-family: monospace">${
             this.pad(2, d => d.getHours())}:${
             this.pad(2, d => d.getMinutes())}:${

@@ -14,15 +14,32 @@ module.exports = {
     path: `${__dirname}/../dist`,
     filename: 'web.js',
   },
+  externals: {
+      fs: '{}',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        options: {
+          plugins: ['istanbul'],
+          presets: ['@babel/preset-env'],
+        }
+      }
+    ],
+  },
   plugins: [
-    new DefinePlugin({
-      process: {
-        env: {
-          NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-        },
-      },
-    }),
-    process.env.NODE_ENV === 'test' ? new DllReferencePlugin({
+    // new DefinePlugin({
+    //   process: {
+    //     env: {
+    //       NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+    //     },
+    //     nextTick: '(function (fn) {setImmediate(fn);})',
+    //     version: JSON.stringify(process.version),
+    //   },
+    // }),
+    process.env.WEBPACK_USE_TEST_DLL ? new DllReferencePlugin({
       context: `${__dirname}/..`,
       manifest: require('../tmp/test/dll.json'),
     }) : null,

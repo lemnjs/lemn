@@ -1,4 +1,4 @@
-import {h} from './tag';
+import {removeRef, replace, replaceAttr, h} from './tag';
 
 function toFragment (replaceWith) {
     if (replaceWith.nodeType) {
@@ -22,13 +22,17 @@ function didAttach (expr) {
 function performRender (expr) {
     maybeCall(expr.willRender, expr);
 
-    const fragment = toFragment(expr.render() || '');
-    replace(expr.ref, fragment);
+    if (expr.ref.attr) {
+      replaceAttr(expr.ref, expr.render() || '');
+    } else {
+      const fragment = toFragment(expr.render() || '');
+      replace(expr.ref, fragment);
 
-    (expr.ref.components || []).forEach(v => !(fragment.components || []).includes(v) && willDetach(v));
-    (fragment.components || []).forEach(performRender);
-    (fragment.components || []).forEach(v => !(expr.ref.components || []).includes(v) && didAttach(v));
-    expr.ref.components = (fragment.components || []);
+      (expr.ref.components || []).forEach(v => !(fragment.components || []).includes(v) && willDetach(v));
+      (fragment.components || []).forEach(performRender);
+      (fragment.components || []).forEach(v => !(expr.ref.components || []).includes(v) && didAttach(v));
+      expr.ref.components = (fragment.components || []);
+    }
 
     maybeCall(expr.didRender, expr);
 }

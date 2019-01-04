@@ -13,7 +13,7 @@ class App extends Component {
         return h`
             <input placeholder="world"
                 onkeyup="${ev => store.set('name', ev.currentTarget.value || 'world')}" />
-            <div>hello ${store.connect('name', encode)}</div>
+            <div>hello ${store.to('name', encode)}</div>
         `;
     }
 }
