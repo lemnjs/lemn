@@ -10,6 +10,9 @@ function startEndNodes (replaceWith) {
 function setRefRange (refRange, replaceWith) {
   const {firstChild, lastChild} = startEndNodes(replaceWith);
 
+  // (firstChild.ref = refRange.start).dom = firstChild;
+  // (lastChild.endRef = refRange.end).dom = lastChild;
+
   (firstChild.ref = (refRange.start = firstChild.ref || refRange.start)).dom = firstChild;
   (lastChild.endRef = (refRange.end = lastChild.endRef || refRange.end)).dom = lastChild;
 }
@@ -28,12 +31,17 @@ function replace (refRange, replaceWith) {
   range.insertNode(replaceWith);
 }
 
-function replaceAttr (refRange, replaceWith) {
-  refRange.attr.dom.removeAttribute(refRange.attr.name);
-  if (typeof replaceWith === 'object') {
-    Object.assign(refRange.attr.dom[refRange.attr.name], replaceWith);
+/**
+ * @param {object|function|string|number|boolean} replaceWith
+ */
+function replaceAttr ({attr: {dom, name}}, replaceWith) {
+  dom.removeAttribute(name);
+  if (Array.isArray(replaceWith)) {
+    dom[name] = replaceWith.join(' ');
+  } else if (typeof replaceWith === 'object') {
+    dom[name] = Object.entries(replaceWith).map(entry => entry.join(':')).join(';');
   } else {
-    refRange.attr.dom[refRange.attr.name] = replaceWith;
+    dom[name] = replaceWith;
   }
 }
 
@@ -51,8 +59,8 @@ function h (strings, ..._exprs) {
 
   const out = exprs.map((expr, i) => (
     (typeof expr === 'object' || typeof expr === 'function') ?
-    `<link class=${BIND_PREFIX}${i}>` :
-    expr
+      `<link class=${BIND_PREFIX}${i}>` :
+      expr
   )).join('') || ' ';
 
   const fragment = document.createRange().createContextualFragment(out);
@@ -62,7 +70,7 @@ function h (strings, ..._exprs) {
       const toReplace = fragment.querySelector(`.${BIND_PREFIX}${i}`);
       if (toReplace) {
         if (!expr.nodeType) {
-          expr.ref = {start: {dom: toReplace}, end: {dom: toReplace}};
+          expr.ref = {...expr.ref, start: {dom: toReplace}, end: {dom: toReplace}};
           fragment.components = [...(fragment.components || []), expr];
         } else {
           replace({start: {dom: toReplace}, end: {dom: toReplace}}, expr);
@@ -71,11 +79,12 @@ function h (strings, ..._exprs) {
         Array.from(fragment.querySelectorAll('*')).some(el => {
           return Array.from(el.attributes).some(attr => {
             if (attr.value === `<link class=${BIND_PREFIX}${i}>`) {
+              const attrName = attr.name === 'class' ? 'className' : attr.name;
               if (expr.render) {
-                expr.ref = {attr: {dom: el, name: attr.name}};
+                expr.ref = {attr: {dom: el, name: attrName}};
                 fragment.components = [...(fragment.components || []), expr];
               } else {
-                replaceAttr({attr: {dom: el, name: attr.name}}, expr);
+                replaceAttr({attr: {dom: el, name: attrName}}, expr);
               }
               return true;
             }
