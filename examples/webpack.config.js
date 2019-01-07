@@ -20,6 +20,7 @@ const html = files.map(name => new HtmlWebpackPlugin({
 
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  devtool: 'source-map',
   context: __dirname,
   entry,
   output: {

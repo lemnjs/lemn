@@ -51,6 +51,16 @@ function flatten (array) {
 
 const BIND_PREFIX = 'BIND_PREFIX';
 
+/**
+ * A template string tag that turns the strings and input objects into dom
+ * elements.
+ *
+ * @example
+ * h`<div>
+ *   ${document.createElement('div')}
+ *   ${{render() {return h`output`;}}}
+ * </div>`
+ */
 function h (strings, ..._exprs) {
   const exprs = [strings[0], ...flatten(_exprs.map((expr, i) => [expr, strings[i + 1]]))];
 
