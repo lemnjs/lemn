@@ -42,8 +42,7 @@
   "description": "",
   "files": [
     "index.js",
-    "render.js",
-    "store.js"
+    "src/*.js"
   ],
   "directories": {},
   "scripts": {
