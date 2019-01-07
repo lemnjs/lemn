@@ -1,6 +1,7 @@
 import {Bond} from './bond';
 import {Model} from './model';
 
+/** A store for multiple Models to utilize them in multiple components. */
 class Store {
   constructor (data = {}) {
     this.data = {};

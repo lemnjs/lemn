@@ -1,18 +1,38 @@
 import {rerender} from './lifecycle';
 
+/**
+ * A lemn component.
+ *
+ * A component in lemn is any object with a `render` method. A component does
+ * not need to explicitly subclass this class.
+ */
 class Component {
-    /* willRender () {} */
+    /**
+     * @member willRender
+     * @memberof Component#
+     */
 
-    /* didRender () {} */
+    /**
+     * @method didRender
+     * @memberof Component#
+     */
 
-    /* willDetach () {} */
+    /**
+     * @method willDetach
+     * @memberof Component#
+     */
 
-    /* didAttach () {} */
+    /**
+     * @method didAttach
+     * @memberof Component#
+     */
 
+    /** Render and inject the output of this component soon. */
     rerender () {
         return rerender(this);
     }
 
+    /** render a visualization of this component with `h`. */
     render () {}
 }
 

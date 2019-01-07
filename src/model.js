@@ -1,5 +1,6 @@
 import {Bond} from './bond';
 
+/** A data model that pushes changes to bonded functions. */
 class Model {
   constructor (data = {}) {
     this.data = data;

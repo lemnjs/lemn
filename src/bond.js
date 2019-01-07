@@ -1,5 +1,11 @@
 import {rerender} from './lifecycle';
 
+/**
+ * A function bonded a Model or other Bond parent. Changes are pushed from
+ * parent to child. Using a Bond in a `h` tagged template string will
+ * automatically rerender when its function returns a new value from its parent
+ * Model or Bond.
+ */
 class Bond {
   constructor (parent, fn) {
     this.parent = parent;

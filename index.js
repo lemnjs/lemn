@@ -4,3 +4,5 @@ export {Component} from './src/component.js';
 export {Bond} from './src/bond';
 export {Model} from './src/model';
 export {Store} from './src/store';
+
+/** Some text. */

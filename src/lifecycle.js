@@ -38,16 +38,22 @@ function performRender (expr) {
     maybeCall(expr.didRender, expr);
 }
 
+/**
+ * Queue to call a component's render method later and inject its returned
+ * value into the dom.
+ */
 function rerender (expr) {
     return Promise.resolve(expr).then(performRender);
 }
 
+/** Attach a component into some root node. */
 function attach(root, expr) {
     root.appendChild(h`${expr}`);
     performRender(expr);
     didAttach(expr);
 }
 
+/** Detach a component from the dom. */
 function detach(expr) {
     willDetach(expr);
     removeRef(expr.ref);

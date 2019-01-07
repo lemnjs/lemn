@@ -29,6 +29,7 @@ function replace (refRange, replaceWith) {
 }
 
 /**
+ * @private
  * @param {object|function|string|number|boolean} replaceWith
  */
 function replaceAttr ({attr: {dom, name}}, replaceWith) {
@@ -55,11 +56,20 @@ const BIND_PREFIX = 'BIND_PREFIX';
  * A template string tag that turns the strings and input objects into dom
  * elements.
  *
+ * @param {Array.<string>} strings
+ * @param {Array} ...exprs
+ *
  * @example
- * h`<div>
- *   ${document.createElement('div')}
- *   ${{render() {return h`output`;}}}
- * </div>`
+ * h`<div></div>`
+ *
+ * @example
+ * h`<div style="${{fontSize: '2em'}}">Big Text</div>`
+ *
+ * @example
+ * h`<div onclick="${ev => console.log('clicked!')}">Click Me</div>`
+ *
+ * @example
+ * h`<div>${{render() {return h`output`;}}}</div>`
  */
 function h (strings, ..._exprs) {
   const exprs = [strings[0], ...flatten(_exprs.map((expr, i) => [expr, strings[i + 1]]))];
