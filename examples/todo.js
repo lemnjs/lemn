@@ -7,26 +7,9 @@ const store = new Store({
 class ToDoItem {
   constructor (id) {
     this.id = id;
-    const model = store.model(this.id);
-    this.dom = h`<div>
-      <input type="checkbox"
-        checked="${model.as(({complete}) => complete)}"
-        onchange="${ev => model.set({...model.data, complete: !model.data.complete})}">
-      ${model.data.description}
-    </div>`;
-    // this.dom = Object.assign(Array.from(this.dom.childNodes), {components: this.dom.components});
-    this.dom = Object.assign(this.dom.firstChild, {components: this.dom.components});
   }
 
   render () {
-    // if (this.once) {
-    //   const range = document.createRange();
-    //   range.setStartBefore(this.ref.start.dom);
-    //   range.setEndAfter(this.ref.end.dom);
-    //   debugger;
-    //   // return range.extractContents();
-    // }
-    // this.once = true;
     const model = store.model(this.id);
     return h`<div>
       <input type="checkbox"
@@ -34,8 +17,6 @@ class ToDoItem {
         onchange="${ev => model.set({...model.data, complete: !model.data.complete})}">
       ${model.data.description}
     </div>`;
-    return this.dom;
-    // return Object.assign(this.dom.cloneNode(), {components: this.dom.components});
   }
 }
 
@@ -72,25 +53,10 @@ class ToDoSet {
   constructor (id) {
     this.id = id;
     this.index = store.model(id);
-    this.data = [];
-    this.push();
-  }
-
-  push () {
-    this.data = this.index.data.map(id => this.data.find(item => item.id === id) || new ToDoItem(id));
-    rerender(this);
-  }
-
-  willDetach () {
-    this.index.unbind(this);
-  }
-
-  didAttach () {
-    this.index.bind(this);
   }
 
   render () {
-    return h`${this.data}`;
+    return h`${this.index.as(ids => ids.map(id => new ToDoItem(id)))}`;
   }
 }
 

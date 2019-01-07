@@ -10,11 +10,8 @@ function startEndNodes (replaceWith) {
 function setRefRange (refRange, replaceWith) {
   const {firstChild, lastChild} = startEndNodes(replaceWith);
 
-  // (firstChild.ref = refRange.start).dom = firstChild;
-  // (lastChild.endRef = refRange.end).dom = lastChild;
-
-  (firstChild.ref = (refRange.start = firstChild.ref || refRange.start)).dom = firstChild;
-  (lastChild.endRef = (refRange.end = lastChild.endRef || refRange.end)).dom = lastChild;
+  (firstChild.ref = (refRange.start = (firstChild.ref || refRange.start))).dom = firstChild;
+  (lastChild.endRef = (refRange.end = (lastChild.endRef || refRange.end))).dom = lastChild;
 }
 
 function removeRef (refRange) {

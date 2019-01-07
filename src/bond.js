@@ -44,7 +44,9 @@ class Bond {
   }
 
   render () {
-    return this.data;
+    const data = this.data || this.fn(this.parent.data);
+    this.data = null;
+    return data;
   }
 }
 

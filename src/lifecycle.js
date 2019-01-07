@@ -20,7 +20,6 @@ function didAttach (expr) {
 }
 
 function performRender (expr) {
-  debugger;
     maybeCall(expr.willRender, expr);
 
     if (expr.ref.attr) {
@@ -28,11 +27,8 @@ function performRender (expr) {
     } else {
       const fragment = toFragment(expr.render() || ' ');
 
-      const {firstChild, lastChild} = fragment instanceof DocumentFragment ? fragment : {firstChild: fragment, lastChild: fragment};
-      firstChild.ref = expr.ref.start;
-
       (expr.ref.components || []).forEach(v => !(fragment.components || []).includes(v) && willDetach(v));
-      (fragment.components || []).forEach(performRender);
+      (fragment.components || []).forEach(component => performRender(component));
       (fragment.components || []).forEach(v => !(expr.ref.components || []).includes(v) && didAttach(v));
       expr.ref.components = (fragment.components || []);
 
@@ -60,6 +56,7 @@ function detach(expr) {
 export {
     toFragment,
     maybeCall,
+    performRender,
     rerender,
     attach,
     detach,
