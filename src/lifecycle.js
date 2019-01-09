@@ -41,19 +41,30 @@ function performRender (expr) {
 /**
  * Queue to call a component's render method later and inject its returned
  * value into the dom.
+ *
+ * @param {Component} component - rerender this component soon
  */
 function rerender (expr) {
     return Promise.resolve(expr).then(performRender);
 }
 
-/** Attach a component into some root node. */
+/**
+ * Attach a component into some root node.
+ *
+ * @param {HTMLElement} root - html element to attach component under
+ * @param {Component} component - component to render
+ */
 function attach(root, expr) {
     root.appendChild(h`${expr}`);
     performRender(expr);
     didAttach(expr);
 }
 
-/** Detach a component from the dom. */
+/**
+ * Detach a component from the dom.
+ *
+ * @param {Component} component - component to detach from parent dom
+ */
 function detach(expr) {
     willDetach(expr);
     removeRef(expr.ref);

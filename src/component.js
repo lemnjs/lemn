@@ -8,7 +8,7 @@ import {rerender} from './lifecycle';
  */
 class Component {
     /**
-     * @member willRender
+     * @method willRender
      * @memberof Component#
      */
 

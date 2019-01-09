@@ -70,6 +70,9 @@ const BIND_PREFIX = 'BIND_PREFIX';
  *
  * @example
  * h`<div>${{render() {return h`output`;}}}</div>`
+ *
+ * @example
+ * h`<div>${new MyComponent()}</div>`
  */
 function h (strings, ..._exprs) {
   const exprs = [strings[0], ...flatten(_exprs.map((expr, i) => [expr, strings[i + 1]]))];
