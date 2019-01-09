@@ -1,28 +1,17 @@
 import {Component, h, attach, Model} from '..';
 
-function pad (n) {
-  return function (d) {
-    return d.toString().padStart(n, '0');
-  };
-}
+const time = new Model(new Date());
+setInterval(() => time.set(new Date()), 87);
 
 class Clock extends Component {
-  constructor () {
+  constructor (model) {
     super();
 
-    this.model = new Model(new Date());
-  }
-
-  willDetach () {
-    clearInterval(this.intervalId);
-  }
-
-  didAttach () {
-    this.intervalId = setInterval(() => this.model.set(new Date()), 87);
+    this.model = model;
   }
 
   pad (n, fn) {
-    return this.model.as(fn).as(pad(n));
+    return this.model.as(fn).as(d =>d.toString().padStart(n, '0'));
   }
 
   render () {
@@ -37,4 +26,4 @@ class Clock extends Component {
   }
 }
 
-attach(document.querySelector('.root'), new Clock);
+attach(document.querySelector('.root'), new Clock(time));

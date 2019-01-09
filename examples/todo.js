@@ -7,45 +7,17 @@ const store = new Store({
 class ToDoItem {
   constructor (id) {
     this.id = id;
+    this.model = store.model(id);
   }
 
   render () {
-    const model = store.model(this.id);
+    const {model} = this;
     return h`<div>
-      <input type="checkbox"
-        checked="${model.as(({complete}) => complete)}"
-        onchange="${ev => model.set({...model.data, complete: !model.data.complete})}">
+    <input type="checkbox"
+      checked="${model.as(({complete}) => complete)}"
+      onchange="${ev => model.set({...model.data, complete: !model.data.complete})}">
       ${model.data.description}
     </div>`;
-  }
-}
-
-class ToDoForm {
-  constructor () {
-    this.nextId = 0;
-    this.submit = this.submit.bind(this);
-    this.liveState = new Model({description: ''});
-  }
-
-  submit (ev) {
-    const id = this.nextId++;
-    store.set(`todos/${id}`, {
-      complete: false,
-      description: this.liveState.data.description,
-    });
-    this.liveState.set({description: ''});
-    store.set('todos/index', [...(store.get('todos/index') || []), `todos/${id}`]);
-    ev.preventDefault();
-    return false;
-  }
-
-  render () {
-    return h`<form onsubmit="${this.submit}">
-      <input type="text" name="description"
-        value="${this.liveState.as(({description}) => description)}"
-        onkeyup="${ev => this.liveState.set({...this.liveState.data, description: ev.currentTarget.value})}">
-      <input type="button" value="add" onclick="${this.submit}">
-    </form>`;
   }
 }
 
@@ -60,11 +32,61 @@ class ToDoSet {
   }
 }
 
+class TextInput {
+  constructor (options = {name: 'name', model: new Model('')}) {
+    this.options = options;
+  }
+
+  render () {
+    const {name, model} = this.options;
+    return h`<input type="text"
+      name="${name}"
+      value="${model.as(i => i)}"
+      onkeyup="${ev => model.set(ev.currentTarget.value)}">`;
+  }
+}
+
+class ToDoForm {
+  constructor () {
+    this.nextId = 0;
+    this.submit = this.submit.bind(this);
+    this.descriptionModel = new Model('');
+  }
+
+  submit (ev) {
+    const id = this.nextId++;
+
+    store.set(`todos/${id}`, {
+      complete: false,
+      description: this.descriptionModel.data,
+    });
+    this.descriptionModel.set('');
+
+    store.set('todos/index', [
+      ...(store.get('todos/index') || []),
+      `todos/${id}`
+    ]);
+
+    ev.preventDefault();
+    return false;
+  }
+
+  render () {
+    return h`<form onsubmit="${this.submit}">
+      ${new TextInput({name: 'description', model: this.descriptionModel})}
+      <input type="button" value="add" onclick="${this.submit}">
+    </form>`;
+  }
+}
+
 class App {
   render () {
+    const todosIndex = store.model('todos/index');
+    const clearComplete = () => todosIndex.set(
+      todosIndex.data.filter(id => !store.get(id).complete)
+    );
     return h`
-      <input type="button" value="clear complete"
-        onclick="${() => store.set('todos/index', store.get('todos/index').filter(id => !store.get(id).complete))}">
+      <input type="button" value="clear complete" onclick="${clearComplete}">
       ${new ToDoForm()}
       ${new ToDoSet('todos/index')}
     `;

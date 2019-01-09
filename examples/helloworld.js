@@ -4,18 +4,30 @@ function encode(s) {
   return s.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-class App extends Component {
-  constructor () {
-    super();
+class TextInput {
+  constructor (options = {}) {
+    this.options = options;
+  }
 
-    this.name = new Model('world');
+  render () {
+    const {name, placeholder, model} = this.options;
+    return h`<input type="text"
+      name="${name}"
+      placeholder="${placeholder}"
+      value="${model.data}"
+      onkeyup="${ev => model.set(ev.currentTarget.value)}">`;
+  }
+}
+
+class App {
+  constructor () {
+    this.name = new Model('');
   }
 
   render () {
     return h`
-      <input placeholder="world"
-        onkeyup="${ev => this.name.set(ev.currentTarget.value || 'world')}" />
-      <div>hello ${this.name.as(encode)}</div>
+      ${new TextInput({placeholder: 'world', model: this.name})}
+      <div>hello ${this.name.as(i => i || 'world').as(encode)}</div>
     `;
   }
 }
