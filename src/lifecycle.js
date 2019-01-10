@@ -26,13 +26,15 @@ function performRender (expr) {
       replaceAttr(expr.ref, expr.render() || '');
     } else {
       const fragment = toFragment(expr.render() || ' ');
+      if (!fragment.ref) {
+        (expr.ref.components || []).forEach(v => !(fragment.components || []).includes(v) && willDetach(v));
+        (fragment.components || []).forEach(component => performRender(component));
+        (fragment.components || []).forEach(v => !(expr.ref.components || []).includes(v) && didAttach(v));
+        expr.ref.components = (fragment.components || []);
 
-      (expr.ref.components || []).forEach(v => !(fragment.components || []).includes(v) && willDetach(v));
-      (fragment.components || []).forEach(component => performRender(component));
-      (fragment.components || []).forEach(v => !(expr.ref.components || []).includes(v) && didAttach(v));
-      expr.ref.components = (fragment.components || []);
-
-      replace(expr.ref, fragment);
+        replace(expr.ref, fragment);
+        fragment.ref = expr.ref;
+      }
     }
 
     maybeCall(expr.didRender, expr);
