@@ -14,13 +14,15 @@ class Bond {
   }
 
   unbind (child) {
-    this.activeChildren = (this.activeChildren || []).filter(c => c !== child);
-    this.parent.unbind(this);
+    if (this.activeChildren = (this.activeChildren || []).filter(c => c !== child).length === 0) {
+      this.parent.unbind(this);
+    }
   }
 
   bind (child) {
-    this.parent.bind(this);
-    this.activeChildren = [...(this.activeChildren || []), child];
+    if ((this.activeChildren = [...(this.activeChildren || []), child]).length === 1) {
+      this.parent.bind(this);
+    }
     this.push();
   }
 

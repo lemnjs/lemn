@@ -11,7 +11,7 @@ class Store {
   }
 
   model (id) {
-    return (this.data[id] = this.data[id] || new Model());
+    return this.data[id] = this.data[id] || new Model();
   }
 
   get (id) {

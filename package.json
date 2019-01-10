@@ -35,8 +35,8 @@
   "directories": {},
   "scripts": {
     "build": "npm run build:lite && npm run build:full && npm run build:examples && npm run build:docs",
-    "build:lite": "mkdirp dist && rollup -m -f iife -n lemn index.js --file dist/web.js && terser --mangle --compress --output dist/web.min.js --source-map < dist/web.js",
-    "build:full": "mkdirp dist && rollup -m -f iife -n lemn lite.js --file dist/web.lite.js && terser --mangle --compress --output dist/web.lite.min.js --source-map < dist/web.lite.js",
+    "build:full": "mkdirp dist && rollup -m -f iife -n lemn index.js --file dist/web.js && terser --mangle --compress --output dist/web.min.js --source-map < dist/web.js",
+    "build:lite": "mkdirp dist && rollup -m -f iife -n lemn lite.js --file dist/web.lite.js && terser --mangle --compress --output dist/web.lite.min.js --source-map < dist/web.lite.js",
     "build:examples": "NODE_ENV=production webpack --config examples/webpack.config.js",
     "build:docs": "jsdoc src -d dist/docs README.md",
     "start": "webpack-dev-server --config examples/webpack.config.js",
