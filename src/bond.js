@@ -14,7 +14,7 @@ class Bond {
   }
 
   unbind (child) {
-    if (this.activeChildren = (this.activeChildren || []).filter(c => c !== child).length === 0) {
+    if ((this.activeChildren = (this.activeChildren || []).filter(c => c !== child)).length === 0) {
       this.parent.unbind(this);
     }
   }
