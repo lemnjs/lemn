@@ -7,7 +7,7 @@ class Model extends Bond {
       bind () {},
       unbind () {},
       data
-    }, (n, o) => n || o);
+    }, n => n);
   }
 
   set (data) {
