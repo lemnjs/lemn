@@ -10,14 +10,14 @@ function startEndNodes (replaceWith) {
 function setRefRange (refRange, replaceWith) {
   const {firstChild, lastChild} = startEndNodes(replaceWith);
 
-  (firstChild.ref = (refRange.start = (firstChild.ref || refRange.start))).dom = firstChild;
-  (lastChild.endRef = (refRange.end = (lastChild.endRef || refRange.end))).dom = lastChild;
+  (firstChild.lemnRef = (refRange.start = (firstChild.lemnRef || refRange.start))).lemnDom = firstChild;
+  (lastChild.lemnEndRef = (refRange.end = (lastChild.lemnEndRef || refRange.end))).lemnDom = lastChild;
 }
 
 function removeRef (refRange) {
   const range = document.createRange();
-  range.setStartBefore(refRange.start.dom);
-  range.setEndAfter(refRange.end.dom);
+  range.setStartBefore(refRange.start.lemnDom);
+  range.setEndAfter(refRange.end.lemnDom);
   range.extractContents();
   return range;
 }
@@ -32,14 +32,14 @@ function replace (refRange, replaceWith) {
  * @private
  * @param {object|function|string|number|boolean} replaceWith
  */
-function replaceAttr ({attr: {dom, name}}, replaceWith) {
-  dom.removeAttribute(name);
+function replaceAttr ({lemnAttr: {lemnDom, lemnName}}, replaceWith) {
+  lemnDom.removeAttribute(lemnName);
   if (Array.isArray(replaceWith)) {
-    dom[name] = replaceWith.join(' ');
+    lemnDom[lemnName] = replaceWith.join(' ');
   } else if (typeof replaceWith === 'object') {
-    dom[name] = Object.entries(replaceWith).map(entry => entry.join(':')).join(';');
+    lemnDom[lemnName] = Object.entries(replaceWith).map(entry => entry.join(':')).join(';');
   } else {
-    dom[name] = replaceWith;
+    lemnDom[lemnName] = replaceWith;
   }
 }
 
@@ -50,10 +50,10 @@ function flatten (array) {
   return array;
 }
 
-const BIND_PREFIX = 'BIND_PREFIX';
+const BIND_PREFIX = 'lemn';
 
 /**
- * A template string tag that turns the strings and input objects into dom
+ * A template string tag that turns the strings and input objects into lemnDom
  * elements.
  *
  * @param {Array.<string>} strings
@@ -90,10 +90,10 @@ function h (strings, ..._exprs) {
       const toReplace = fragment.querySelector(`.${BIND_PREFIX}${i}`);
       if (toReplace) {
         if (!expr.nodeType) {
-          expr.ref = {...expr.ref, start: {dom: toReplace}, end: {dom: toReplace}};
-          fragment.components = [...(fragment.components || []), expr];
+          expr.lemnRef = {...expr.lemnRef, start: {lemnDom: toReplace}, end: {lemnDom: toReplace}};
+          fragment.lemnComponents = [...(fragment.lemnComponents || []), expr];
         } else {
-          replace({start: {dom: toReplace}, end: {dom: toReplace}}, expr);
+          replace({start: {lemnDom: toReplace}, end: {lemnDom: toReplace}}, expr);
         }
       } else {
         Array.from(fragment.querySelectorAll('*')).some(el => {
@@ -101,10 +101,10 @@ function h (strings, ..._exprs) {
             if (attr.value === `<link class=${BIND_PREFIX}${i}>`) {
               const attrName = attr.name === 'class' ? 'className' : attr.name;
               if (expr.render) {
-                expr.ref = {attr: {dom: el, name: attrName}};
-                fragment.components = [...(fragment.components || []), expr];
+                expr.lemnRef = {lemnAttr: {lemnDom: el, lemnName: attrName}};
+                fragment.lemnComponents = [...(fragment.lemnComponents || []), expr];
               } else {
-                replaceAttr({attr: {dom: el, name: attrName}}, expr);
+                replaceAttr({lemnAttr: {lemnDom: el, lemnName: attrName}}, expr);
               }
               return true;
             }

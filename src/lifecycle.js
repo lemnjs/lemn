@@ -22,18 +22,18 @@ function didAttach (expr) {
 function performRender (expr) {
     maybeCall(expr.willRender, expr);
 
-    if (expr.ref.attr) {
-      replaceAttr(expr.ref, expr.render() || '');
+    if (expr.lemnRef.attr) {
+      replaceAttr(expr.lemnRef, expr.render() || '');
     } else {
       const fragment = toFragment(expr.render() || ' ');
-      if (!fragment.ref) {
-        (expr.ref.components || []).forEach(v => !(fragment.components || []).includes(v) && willDetach(v));
-        (fragment.components || []).forEach(component => performRender(component));
-        (fragment.components || []).forEach(v => !(expr.ref.components || []).includes(v) && didAttach(v));
-        expr.ref.components = (fragment.components || []);
+      if (!fragment.lemnRef) {
+        (expr.lemnRef.lemnComponents || []).forEach(v => !(fragment.lemnComponents || []).includes(v) && willDetach(v));
+        (fragment.lemnComponents || []).forEach(component => performRender(component));
+        (fragment.lemnComponents || []).forEach(v => !(expr.lemnRef.lemnComponents || []).includes(v) && didAttach(v));
+        expr.lemnRef.lemnComponents = (fragment.lemnComponents || []);
 
-        replace(expr.ref, fragment);
-        fragment.ref = expr.ref;
+        replace(expr.lemnRef, fragment);
+        fragment.lemnRef = expr.lemnRef;
       }
     }
 
@@ -69,7 +69,7 @@ function attach(root, expr) {
  */
 function detach(expr) {
     willDetach(expr);
-    removeRef(expr.ref);
+    removeRef(expr.lemnRef);
 }
 
 export {

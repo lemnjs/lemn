@@ -3,27 +3,27 @@ import {Model} from './model';
 
 /** A store for multiple Models to utilize them in multiple components. */
 class Store {
-  constructor (data = {}) {
-    this.data = {};
-    for (const key in data) {
-      this.data[key] = new Model(data[key]);
+  constructor (lemnData = {}) {
+    this.lemnData = {};
+    for (const key in lemnData) {
+      this.lemnData[key] = new Model(lemnData[key]);
     }
   }
 
   model (id) {
-    return (this.data[id] = this.data[id] || new Model());
+    return (this.lemnData[id] = this.lemnData[id] || new Model());
   }
 
   get (id) {
-    return (this.data[id] = this.data[id] || new Model()).data;
+    return (this.lemnData[id] = this.lemnData[id] || new Model()).data;
   }
 
-  set (id, data) {
-    (this.data[id] = this.data[id] || new Model()).set(data);
+  set (id, lemnData) {
+    (this.lemnData[id] = this.lemnData[id] || new Model()).set(lemnData);
   }
 
   remove (id) {
-    delete this.data[id];
+    delete this.lemnData[id];
   }
 }
 
