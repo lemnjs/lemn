@@ -10,7 +10,7 @@ class Bond {
   constructor (parent, fn) {
     this.parent = parent;
     this.fn = fn;
-    this.data = this.fn(this.parent.pull(), this.data);
+    this.data = this.fn(this.parent.data, this.data);
   }
 
   unbind (child) {
@@ -22,12 +22,8 @@ class Bond {
   bind (child) {
     if ((this.activeChildren = [...(this.activeChildren || []), child]).length === 1) {
       this.parent.bind(this);
+      this.data = this.fn(this.parent.data, this.data);
     }
-    this.push();
-  }
-
-  pull () {
-    return this.data = this.fn(this.parent.pull(), this.data);
   }
 
   push () {
