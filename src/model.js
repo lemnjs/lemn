@@ -1,35 +1,18 @@
 import {Bond} from './bond';
 
 /** A data model that pushes changes to bonded functions. */
-class Model {
+class Model extends Bond {
   constructor (data = {}) {
-    this.data = data;
+    super({
+      bind () {},
+      unbind () {},
+      data
+    }, (n, o) => n || o);
   }
 
   set (data) {
-    this.data = data;
-    (this.activeChildren || []).forEach(child => child.push());
-  }
-
-  unbind (child) {
-    this.activeChildren = (this.activeChildren || []).filter(c => c !== child);
-  }
-
-  bind (child) {
-    (this.activeChildren = [...(this.activeChildren || []), child])
-      .forEach(child => child.push());
-  }
-
-  pull () {
-    return this.data;
-  }
-
-  as (fn) {
-    return new Bond(this, fn);
-  }
-
-  toJSON () {
-    return this.data;
+    this.parent.data = data;
+    this.push();
   }
 }
 

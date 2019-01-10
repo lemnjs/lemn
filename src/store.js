@@ -11,27 +11,19 @@ class Store {
   }
 
   model (id) {
-    return this.data[id] = this.data[id] || new Model();
+    return (this.data[id] = this.data[id] || new Model());
   }
 
   get (id) {
-    return this.model(id).data;
+    return (this.data[id] = this.data[id] || new Model()).data;
   }
 
   set (id, data) {
-    this.model(id).set(data);
+    (this.data[id] = this.data[id] || new Model()).set(data);
   }
 
   remove (id) {
     delete this.data[id];
-  }
-
-  as (id, fn = i => i) {
-    return new Bond(this.model(id), fn);
-  }
-
-  toJSON () {
-    return this.data;
   }
 }
 
