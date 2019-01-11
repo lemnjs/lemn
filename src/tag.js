@@ -124,4 +124,5 @@ export {
   replaceAttr,
   flatten,
   h,
+  BIND_PREFIX,
 };

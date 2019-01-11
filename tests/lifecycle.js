@@ -52,11 +52,11 @@ test('performRender', t => {
 
   class Middle {
     render () {
-      if (!this.dom) {
-        this.dom = h`${new Inner}`;
-        this.dom = Object.assign(Array.from(this.dom), {components: this.dom.components});
+      if (!this.lemnPrivateDom) {
+        this.lemnPrivateDom = h`${new Inner}`;
+        this.lemnPrivateDom = Object.assign(Array.from(this.lemnPrivateDom), {components: this.lemnPrivateDom.lemnPrivateComponents});
       }
-      return this.dom;
+      return this.lemnPrivateDom;
     }
   }
 
@@ -75,8 +75,10 @@ test('performRender', t => {
 
   const root = h`${outer}`;
   performRender(outer);
-  t.equal(outer.ref.start.dom.childNodes.length, 1);
+  t.equal(outer.lemnRef.lemnPrivateStart.lemnPrivateDom.childNodes.length, 1);
 
   performRender(middle);
-  t.equal(outer.ref.start.dom.childNodes.length, 1);
+  t.equal(outer.lemnRef.lemnPrivateStart.lemnPrivateDom.childNodes.length, 1);
+
+  t.end();
 });
