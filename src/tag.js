@@ -10,14 +10,14 @@ function startEndNodes (replaceWith) {
 function setRefRange (refRange, replaceWith) {
   const {firstChild, lastChild} = startEndNodes(replaceWith);
 
-  (firstChild.lemnRef = (refRange.start = (firstChild.lemnRef || refRange.start))).lemnDom = firstChild;
-  (lastChild.lemnEndRef = (refRange.end = (lastChild.lemnEndRef || refRange.end))).lemnDom = lastChild;
+  (firstChild.lemnRef = (refRange.lemnPrivateStart = (firstChild.lemnRef || refRange.lemnPrivateStart))).lemnPrivateDom = firstChild;
+  (lastChild.lemnEndRef = (refRange.lemnPrivateEnd = (lastChild.lemnEndRef || refRange.lemnPrivateEnd))).lemnPrivateDom = lastChild;
 }
 
 function removeRef (refRange) {
   const range = document.createRange();
-  range.setStartBefore(refRange.start.lemnDom);
-  range.setEndAfter(refRange.end.lemnDom);
+  range.setStartBefore(refRange.lemnPrivateStart.lemnPrivateDom);
+  range.setEndAfter(refRange.lemnPrivateEnd.lemnPrivateDom);
   range.extractContents();
   return range;
 }
@@ -32,14 +32,14 @@ function replace (refRange, replaceWith) {
  * @private
  * @param {object|function|string|number|boolean} replaceWith
  */
-function replaceAttr ({lemnAttr: {lemnDom, lemnName}}, replaceWith) {
-  lemnDom.removeAttribute(lemnName);
+function replaceAttr ({lemnPrivateAttr: {lemnPrivateDom, lemnPrivateName}}, replaceWith) {
+  lemnPrivateDom.removeAttribute(lemnPrivateName);
   if (Array.isArray(replaceWith)) {
-    lemnDom[lemnName] = replaceWith.join(' ');
+    lemnPrivateDom[lemnPrivateName] = replaceWith.join(' ');
   } else if (typeof replaceWith === 'object') {
-    lemnDom[lemnName] = Object.entries(replaceWith).map(entry => entry.join(':')).join(';');
+    Object.assign(lemnPrivateDom[lemnPrivateName], replaceWith);
   } else {
-    lemnDom[lemnName] = replaceWith;
+    lemnPrivateDom[lemnPrivateName] = replaceWith;
   }
 }
 
@@ -53,7 +53,7 @@ function flatten (array) {
 const BIND_PREFIX = 'lemn';
 
 /**
- * A template string tag that turns the strings and input objects into lemnDom
+ * A template string tag that turns the strings and input objects into lemnPrivateDom
  * elements.
  *
  * @param {Array.<string>} strings
@@ -90,10 +90,10 @@ function h (strings, ..._exprs) {
       const toReplace = fragment.querySelector(`.${BIND_PREFIX}${i}`);
       if (toReplace) {
         if (!expr.nodeType) {
-          expr.lemnRef = {...expr.lemnRef, start: {lemnDom: toReplace}, end: {lemnDom: toReplace}};
-          fragment.lemnComponents = [...(fragment.lemnComponents || []), expr];
+          expr.lemnRef = {...expr.lemnRef, lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}};
+          fragment.lemnPrivateComponents = [...(fragment.lemnPrivateComponents || []), expr];
         } else {
-          replace({start: {lemnDom: toReplace}, end: {lemnDom: toReplace}}, expr);
+          replace({lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}}, expr);
         }
       } else {
         Array.from(fragment.querySelectorAll('*')).some(el => {
@@ -101,10 +101,10 @@ function h (strings, ..._exprs) {
             if (attr.value === `<link class=${BIND_PREFIX}${i}>`) {
               const attrName = attr.name === 'class' ? 'className' : attr.name;
               if (expr.render) {
-                expr.lemnRef = {lemnAttr: {lemnDom: el, lemnName: attrName}};
-                fragment.lemnComponents = [...(fragment.lemnComponents || []), expr];
+                expr.lemnRef = {lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}};
+                fragment.lemnPrivateComponents = [...(fragment.lemnPrivateComponents || []), expr];
               } else {
-                replaceAttr({lemnAttr: {lemnDom: el, lemnName: attrName}}, expr);
+                replaceAttr({lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}}, expr);
               }
               return true;
             }

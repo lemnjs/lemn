@@ -9,26 +9,26 @@ import {rerender} from './lifecycle';
 class Bond {
   constructor (parent, fn) {
     this.parent = parent;
-    this.lemnFn = fn;
-    this.data = this.lemnFn(this.parent.data, this.data);
+    this.lemnPrivateFn = fn;
+    this.data = this.lemnPrivateFn(this.parent.data, this.data);
   }
 
   unbind (child) {
-    if ((this.lemnActiveChildren = (this.lemnActiveChildren || []).filter(c => c !== child)).length === 0) {
+    if ((this.lemnPrivateActiveChildren = (this.lemnPrivateActiveChildren || []).filter(c => c !== child)).length === 0) {
       this.parent.unbind(this);
     }
   }
 
   bind (child) {
-    if ((this.lemnActiveChildren = [...(this.lemnActiveChildren || []), child]).length === 1) {
+    if ((this.lemnPrivateActiveChildren = [...(this.lemnPrivateActiveChildren || []), child]).length === 1) {
       this.parent.bind(this);
-      this.data = this.lemnFn(this.parent.data, this.data);
+      this.data = this.lemnPrivateFn(this.parent.data, this.data);
     }
   }
 
   push () {
-    if (this.data !== (this.data = this.lemnFn(this.parent.data, this.data))) {
-      (this.lemnActiveChildren || []).forEach(child => child.push());
+    if (this.data !== (this.data = this.lemnPrivateFn(this.parent.data, this.data))) {
+      (this.lemnPrivateActiveChildren || []).forEach(child => child.push());
       if (this.lemnRef) {
         rerender(this);
       }

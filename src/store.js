@@ -1,29 +1,29 @@
-import {Bond} from './bond';
 import {Model} from './model';
 
 /** A store for multiple Models to utilize them in multiple components. */
 class Store {
   constructor (lemnData = {}) {
-    this.lemnData = {};
-    for (const key in lemnData) {
-      this.lemnData[key] = new Model(lemnData[key]);
-    }
+    Object.entries(lemnData).forEach(args => this.set(...args));
   }
 
   model (id) {
-    return (this.lemnData[id] = this.lemnData[id] || new Model());
+    return ((this.lemnPrivateData = this.lemnPrivateData || {})[id] = this.lemnPrivateData[id] || new Model());
   }
 
   get (id) {
-    return (this.lemnData[id] = this.lemnData[id] || new Model()).data;
+    return ((this.lemnPrivateData = this.lemnPrivateData || {})[id] = this.lemnPrivateData[id] || new Model()).data;
   }
 
   set (id, lemnData) {
-    (this.lemnData[id] = this.lemnData[id] || new Model()).set(lemnData);
+    ((this.lemnPrivateData = this.lemnPrivateData || {})[id] = this.lemnPrivateData[id] || new Model()).set(lemnData);
   }
 
   remove (id) {
-    delete this.lemnData[id];
+    delete this.lemnPrivateData[id];
+  }
+
+  toJSON () {
+    return this.lemnPrivateData;
   }
 }
 

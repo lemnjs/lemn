@@ -22,15 +22,15 @@ function didAttach (expr) {
 function performRender (expr) {
     maybeCall(expr.willRender, expr);
 
-    if (expr.lemnRef.attr) {
+    if (expr.lemnRef.lemnPrivateAttr) {
       replaceAttr(expr.lemnRef, expr.render() || '');
     } else {
       const fragment = toFragment(expr.render() || ' ');
       if (!fragment.lemnRef) {
-        (expr.lemnRef.lemnComponents || []).forEach(v => !(fragment.lemnComponents || []).includes(v) && willDetach(v));
-        (fragment.lemnComponents || []).forEach(component => performRender(component));
-        (fragment.lemnComponents || []).forEach(v => !(expr.lemnRef.lemnComponents || []).includes(v) && didAttach(v));
-        expr.lemnRef.lemnComponents = (fragment.lemnComponents || []);
+        (expr.lemnRef.lemnPrivateComponents || []).forEach(v => !(fragment.lemnPrivateComponents || []).includes(v) && willDetach(v));
+        (fragment.lemnPrivateComponents || []).forEach(component => performRender(component));
+        (fragment.lemnPrivateComponents || []).forEach(v => !(expr.lemnRef.lemnPrivateComponents || []).includes(v) && didAttach(v));
+        expr.lemnRef.lemnPrivateComponents = (fragment.lemnPrivateComponents || []);
 
         replace(expr.lemnRef, fragment);
         fragment.lemnRef = expr.lemnRef;

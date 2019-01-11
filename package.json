@@ -34,9 +34,11 @@
   ],
   "directories": {},
   "scripts": {
-    "build": "npm run build:lite && npm run build:full && npm run build:examples && npm run build:docs",
-    "build:full": "mkdirp dist && rollup -m -f iife -n lemn index.js --file dist/web.js && terser --mangle --compress --output dist/web.min.js --source-map < dist/web.js",
-    "build:lite": "mkdirp dist && rollup -m -f iife -n lemn lite.js --file dist/web.lite.js && terser --mangle --compress --output dist/web.lite.min.js --source-map < dist/web.lite.js",
+    "build": "npm run build:lite:web && npm run build:lite:esm && npm run build:full:web && npm run build:full:esm && npm run build:examples && npm run build:docs",
+    "build:full:web": "mkdirp dist && rollup -m -f iife -n lemn index.js --file dist/web.js && terser --ecma 8 --mangle --compress --mangle-props regex=/^lemnPrivate/ --output dist/web.min.js --source-map < dist/web.js",
+    "build:full:esm": "mkdirp dist && rollup -m -f esm index.js --file dist/index.js && terser --ecma 8 --module --mangle --compress --mangle-props regex=/^lemnPrivate/ --output dist/index.min.js --source-map < dist/index.js",
+    "build:lite:web": "mkdirp dist && rollup -m -f iife -n lemn lite.js --file dist/web.lite.js && terser --ecma 8 --mangle --compress --mangle-props regex=/^lemnPrivate/ --output dist/web.lite.min.js --source-map < dist/web.lite.js",
+    "build:lite:esm": "mkdirp dist && rollup -m -f esm lite.js --file dist/lite.js && terser --ecma 8 --module --mangle --compress --mangle-props regex=/^lemnPrivate/ --output dist/lite.min.js --source-map < dist/lite.js",
     "build:examples": "NODE_ENV=production webpack --config examples/webpack.config.js",
     "build:docs": "jsdoc src -d dist/docs README.md",
     "start": "webpack-dev-server --config examples/webpack.config.js",
@@ -54,5 +56,8 @@
   "bugs": {
     "url": "https://github.com/mzgoddard/-/issues"
   },
-  "homepage": "https://github.com/mzgoddard/-#readme"
+  "homepage": "https://github.com/mzgoddard/-#readme",
+  "dependencies": {
+    "terser-webpack-plugin": "^1.2.1"
+  }
 }

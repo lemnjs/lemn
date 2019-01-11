@@ -14,6 +14,10 @@ class Model extends Bond {
     this.parent.data = data;
     this.push();
   }
+
+  toJSON () {
+    return this.data;
+  }
 }
 
 export {
