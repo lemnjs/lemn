@@ -16,6 +16,15 @@ module.exports = files.map(name => ({
   output: {
     path: `${__dirname}/../dist/examples`,
   },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: ["source-map-loader"],
+        enforce: "pre"
+      },
+    ],
+  },
   optimization: {
     minimizer: [new TerserPlugin({
       sourceMap: true,
