@@ -1,7 +1,9 @@
 {
   "name": "lemn",
   "version": "0.1.1",
-  "main": "index.js",
+  "main": "dist/index.cjs.min.js",
+  "module": "dist/index.min.js",
+  "description": "",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -22,19 +24,30 @@
     "tape": "^4.9.2",
     "tape-run": "^5.0.0",
     "terser": "^3.14.1",
+    "terser-webpack-plugin": "^1.2.1",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.14",
     "webpack-visualizer-plugin": "^0.1.11"
   },
-  "description": "",
   "files": [
-    "index.js",
-    "src/*.js"
+    "dist/index.cjs.js",
+    "dist/index.cjs.js.map",
+    "dist/index.cjs.min.js",
+    "dist/index.cjs.min.js.map",
+    "dist/index.js",
+    "dist/index.js.map",
+    "dist/index.min.js",
+    "dist/index.min.js.map",
+    "dist/lite.js",
+    "dist/lite.js.map",
+    "dist/lite.min.js",
+    "dist/lite.min.js.map"
   ],
   "directories": {},
   "scripts": {
-    "build": "npm run build:lite:web && npm run build:lite:esm && npm run build:full:web && npm run build:full:esm && npm run build:examples && npm run build:docs",
+    "build": "npm run build:lite:web && npm run build:lite:esm && npm run bild:full:cjs && npm run build:full:web && npm run build:full:esm && npm run build:examples && npm run build:docs",
+    "build:full:cjs": "mkdirp dist && rollup -m -f cjs index.js --file dist/index.cjs.js && terser --ecma 8 --module --mangle --compress --mangle-props regex=/^lemnPrivate/ --output dist/index.cjs.min.js --source-map < dist/index.cjs.js",
     "build:full:web": "mkdirp dist && rollup -m -f iife -n lemn index.js --file dist/web.js && terser --ecma 8 --mangle --compress --mangle-props regex=/^lemnPrivate/ --output dist/web.min.js --source-map < dist/web.js",
     "build:full:esm": "mkdirp dist && rollup -m -f esm index.js --file dist/index.js && terser --ecma 8 --module --mangle --compress --mangle-props regex=/^lemnPrivate/ --output dist/index.min.js --source-map < dist/index.js",
     "build:lite:web": "mkdirp dist && rollup -m -f iife -n lemn lite.js --file dist/web.lite.js && terser --ecma 8 --mangle --compress --mangle-props regex=/^lemnPrivate/ --output dist/web.lite.min.js --source-map < dist/web.lite.js",
@@ -56,8 +69,5 @@
   "bugs": {
     "url": "https://github.com/mzgoddard/-/issues"
   },
-  "homepage": "https://github.com/mzgoddard/-#readme",
-  "dependencies": {
-    "terser-webpack-plugin": "^1.2.1"
-  }
+  "homepage": "https://github.com/mzgoddard/-#readme"
 }
