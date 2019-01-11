@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.2"></a>
+## [0.2.2](https://github.com/mzgoddard/-/compare/v0.2.1...v0.2.2) (2019-01-11)
+
+
+### Bug Fixes
+
+* fix source map configuration, drop lite esm build ([394f10b](https://github.com/mzgoddard/-/commit/394f10b))
+
+
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/mzgoddard/-/compare/v0.2.0...v0.2.1) (2019-01-11)
 
