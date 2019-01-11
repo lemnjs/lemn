@@ -46,7 +46,7 @@
   ],
   "directories": {},
   "scripts": {
-    "build": "npm run build:lite:web && npm run build:lite:esm && npm run bild:full:cjs && npm run build:full:web && npm run build:full:esm && npm run build:examples && npm run build:docs",
+    "build": "npm run build:lite:web && npm run build:lite:esm && npm run build:full:cjs && npm run build:full:web && npm run build:full:esm && npm run build:examples && npm run build:docs",
     "build:full:cjs": "mkdirp dist && rollup -m -f cjs index.js --file dist/index.cjs.js && terser --ecma 8 --module --mangle --compress --mangle-props regex=/^lemnPrivate/ --output dist/index.cjs.min.js --source-map < dist/index.cjs.js",
     "build:full:web": "mkdirp dist && rollup -m -f iife -n lemn index.js --file dist/web.js && terser --ecma 8 --mangle --compress --mangle-props regex=/^lemnPrivate/ --output dist/web.min.js --source-map < dist/web.js",
     "build:full:esm": "mkdirp dist && rollup -m -f esm index.js --file dist/index.js && terser --ecma 8 --module --mangle --compress --mangle-props regex=/^lemnPrivate/ --output dist/index.min.js --source-map < dist/index.js",
