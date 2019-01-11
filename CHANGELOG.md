@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.1"></a>
+## [0.2.1](https://github.com/mzgoddard/-/compare/v0.2.0...v0.2.1) (2019-01-11)
+
+
+### Bug Fixes
+
+* fix typo in build script ([4bde197](https://github.com/mzgoddard/-/commit/4bde197))
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/mzgoddard/-/compare/v0.1.1...v0.2.0) (2019-01-11)
 
