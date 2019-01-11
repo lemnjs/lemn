@@ -1,8 +1,7 @@
-import {Component, h, attach, Store, Model} from '..';
+import {h, attach, Store, Model} from '..';
 
-class App extends Component {
+class App {
   constructor () {
-    super();
     this.hover = new Model(false);
   }
 

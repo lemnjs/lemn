@@ -1,12 +1,10 @@
-import {Component, h, attach, Model} from '..';
+import {h, attach, Model} from '..';
 
 const time = new Model(new Date());
 setInterval(() => time.set(new Date()), 87);
 
-class Clock extends Component {
+class Clock {
   constructor (model) {
-    super();
-
     this.model = model;
   }
 
@@ -16,6 +14,7 @@ class Clock extends Component {
 
   render () {
     return h`<div style="${{
+      fontSize: '2em',
       fontFamily: 'monospace',
     }}">${
       this.pad(2, d => d.getHours())}:${
