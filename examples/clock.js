@@ -9,18 +9,34 @@ class Clock {
   }
 
   pad (n, fn) {
-    return this.model.as(fn).as(d =>d.toString().padStart(n, '0'));
+    return this.model.as(fn).as(d => d.toString().padStart(n, '0'));
   }
 
   render () {
-    return h`<div style="${{
+    return h`
+    <section class="container" style="${{
+      maxWidth: '20em',
+      alignItems: 'center',
+      display: 'flex',
+      height: '100%',
+    }}">
+    <div style="${{
       fontSize: '2em',
       fontFamily: 'monospace',
-    }}">${
-      this.pad(2, d => d.getHours())}:${
-      this.pad(2, d => d.getMinutes())}:${
-      this.pad(2, d => d.getSeconds())}.${
-      this.pad(3, d => d.getMilliseconds())}
+      textAlign: 'center',
+      width: '100%',
+    }}">
+      <div class="row">
+        <div class="column">${this.pad(2, d => d.getHours())}</div>
+        <div>:</div>
+        <div class="column">${this.pad(2, d => d.getMinutes())}</div>
+        <div>:</div>
+        <div class="column">${this.pad(2, d => d.getSeconds())}</div>
+        <div>.</div>
+        <div class="column">${this.pad(3, d => d.getMilliseconds())}</div>
+      </div>
+    </div>
+    </section>
     `;
   }
 }
