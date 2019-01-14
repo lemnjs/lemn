@@ -59,12 +59,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mzgoddard/-.git"
+    "url": "git+https://github.com/mzgoddard/lemn.git"
   },
   "keywords": [],
   "author": "Michael 'Z' Goddard <mzgoddard@gmail.com>",
   "bugs": {
-    "url": "https://github.com/mzgoddard/-/issues"
+    "url": "https://github.com/mzgoddard/lemn/issues"
   },
-  "homepage": "https://github.com/mzgoddard/-#readme"
+  "homepage": "https://github.com/mzgoddard/lemn#readme"
 }
