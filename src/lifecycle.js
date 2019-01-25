@@ -4,7 +4,7 @@ function toFragment (replaceWith) {
     if (replaceWith.nodeType) {
         return replaceWith;
     }
-    return h`${replaceWith}`;
+    return h`${replaceWith}`.content;
 }
 
 function maybeCall (fn, _this) {
@@ -57,7 +57,7 @@ function rerender (expr) {
  * @param {Component} component - component to render
  */
 function attach(root, expr) {
-    root.appendChild(h`${expr}`);
+    root.appendChild(toFragment(expr));
     performRender(expr);
     didAttach(expr);
 }

@@ -77,45 +77,53 @@ const BIND_PREFIX = 'lemn';
 function h (strings, ..._exprs) {
   const exprs = [strings[0], ...flatten(_exprs.map((expr, i) => [expr, strings[i + 1]]))];
 
-  const out = exprs.map((expr, i) => (
-    (typeof expr === 'object' || typeof expr === 'function') ?
-      `<link class=${BIND_PREFIX}${i}>` :
-      expr
-  )).join('') || ' ';
+  let content;
+  Object.defineProperty(exprs, 'content', {
+    get () {
+      if (!content) {
+        const out = exprs.map((expr, i) => (
+          (typeof expr === 'object' || typeof expr === 'function') ?
+            `<link class=${BIND_PREFIX}${i}>` :
+            expr
+        )).join('') || ' ';
 
-  const fragment = document.createRange().createContextualFragment(out);
+        content = document.createRange().createContextualFragment(out);
 
-  exprs.forEach((expr, i) => {
-    if (typeof expr === 'object' || typeof expr === 'function') {
-      const toReplace = fragment.querySelector(`.${BIND_PREFIX}${i}`);
-      if (toReplace) {
-        if (!expr.nodeType) {
-          expr.lemnRef = {...expr.lemnRef, lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}};
-          fragment.lemnPrivateComponents = [...(fragment.lemnPrivateComponents || []), expr];
-        } else {
-          replace({lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}}, expr);
-          fragment.lemnPrivateComponents = [...(fragment.lemnPrivateComponents || []), ...(expr.lemnPrivateComponents || [])];
-        }
-      } else {
-        Array.from(fragment.querySelectorAll('*')).some(el => {
-          return Array.from(el.attributes).some(attr => {
-            if (attr.value === `<link class=${BIND_PREFIX}${i}>`) {
-              const attrName = attr.name === 'class' ? 'className' : attr.name;
-              if (expr.render) {
-                expr.lemnRef = {lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}};
-                fragment.lemnPrivateComponents = [...(fragment.lemnPrivateComponents || []), expr];
+        exprs.forEach((expr, i) => {
+          if (typeof expr === 'object' || typeof expr === 'function') {
+            const toReplace = content.querySelector(`.${BIND_PREFIX}${i}`);
+            if (toReplace) {
+              if (!expr.nodeType) {
+                expr.lemnRef = {...expr.lemnRef, lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}};
+                content.lemnPrivateComponents = [...(content.lemnPrivateComponents || []), expr];
               } else {
-                replaceAttr({lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}}, expr);
+                replace({lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}}, expr.cloneNode(true));
               }
-              return true;
+            } else {
+              Array.from(content.querySelectorAll('*')).some(el => {
+                return Array.from(el.attributes).some(attr => {
+                  if (attr.value === `<link class=${BIND_PREFIX}${i}>`) {
+                    const attrName = attr.name === 'class' ? 'className' : attr.name;
+                    if (expr.render) {
+                      expr.lemnRef = {lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}};
+                      content.lemnPrivateComponents = [...(content.lemnPrivateComponents || []), expr];
+                    } else {
+                      replaceAttr({lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}}, expr);
+                    }
+                    return true;
+                  }
+                });
+              });
             }
-          });
+          }
         });
       }
+
+      return content;
     }
   });
 
-  return fragment;
+  return exprs;
 }
 
 export {
