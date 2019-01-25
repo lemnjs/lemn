@@ -94,6 +94,7 @@ function h (strings, ..._exprs) {
           fragment.lemnPrivateComponents = [...(fragment.lemnPrivateComponents || []), expr];
         } else {
           replace({lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}}, expr);
+          fragment.lemnPrivateComponents = [...(fragment.lemnPrivateComponents || []), ...(expr.lemnPrivateComponents || [])];
         }
       } else {
         Array.from(fragment.querySelectorAll('*')).some(el => {
