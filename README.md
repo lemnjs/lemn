@@ -21,7 +21,7 @@ class Item {
   }
 
   render () {
-    return lemn.h`<li>${this.model.as(text => text)}</li>`;
+    return lemn.h`<li>${this.model}</li>`;
   }
 }
 
@@ -31,7 +31,7 @@ class App {
   }
 
   render () {
-    return lemn.h`<ol>${this.model.map(item => new Item(item))}</ol>`;
+    return lemn.h`<ol>${this.model.as(list => list.map(item => new Item(item)))}</ol>`;
   }
 }
 
