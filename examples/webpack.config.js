@@ -3,7 +3,7 @@ const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
-const VERSIONS = ['0.3.1', '0.3.0'];
+const VERSIONS = ['0.4.0'];
 
 if (
   process.env.npm_package_version &&
