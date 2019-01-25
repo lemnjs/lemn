@@ -86,9 +86,11 @@ class App {
       todosIndex.data.filter(id => !store.get(id).complete)
     );
     return h`
+      <section class="container" style="margin-top: 2em">
       <input type="button" value="clear complete" onclick="${clearComplete}">
       ${new ToDoForm()}
       ${new ToDoSet('todos/index')}
+      </section>
     `;
   }
 }

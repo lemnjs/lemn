@@ -26,8 +26,10 @@ class App {
 
   render () {
     return h`
+      <section class="container" style="margin-top: 2em">
       ${new TextInput({placeholder: 'world', model: this.name})}
       <div>hello ${this.name.as(i => i || 'world').as(encode)}</div>
+      </section>
     `;
   }
 }

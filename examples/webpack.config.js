@@ -45,6 +45,7 @@ module.exports = files.map(name => ({
       chunks: [name],
     }),
     new (require('webpack').DefinePlugin)({
+      FILES: JSON.stringify(files),
       process: {
         env: {
           NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
