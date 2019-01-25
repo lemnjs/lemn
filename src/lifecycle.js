@@ -32,7 +32,7 @@ function performRender (expr) {
         (fragment.lemnPrivateComponents || []).forEach(v => !(expr.lemnRef.lemnPrivateComponents || []).includes(v) && didAttach(v));
         expr.lemnRef.lemnPrivateComponents = (fragment.lemnPrivateComponents || []);
 
-        replace(expr.lemnRef, fragment);
+        replace(expr.lemnRef, fragment.cloneNode(true));
         fragment.lemnRef = expr.lemnRef;
       }
     }
