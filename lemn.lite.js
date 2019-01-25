@@ -80,51 +80,60 @@ var lemn = (function (exports) {
   function h (strings, ..._exprs) {
     const exprs = [strings[0], ...flatten(_exprs.map((expr, i) => [expr, strings[i + 1]]))];
 
-    const out = exprs.map((expr, i) => (
-      (typeof expr === 'object' || typeof expr === 'function') ?
-        `<link class=${BIND_PREFIX}${i}>` :
-        expr
-    )).join('') || ' ';
+    let content;
+    Object.defineProperty(exprs, 'content', {
+      get () {
+        if (!content) {
+          const out = exprs.map((expr, i) => (
+            (typeof expr === 'object' || typeof expr === 'function') ?
+              `<link class=${BIND_PREFIX}${i}>` :
+              expr
+          )).join('') || ' ';
 
-    const fragment = document.createRange().createContextualFragment(out);
+          content = document.createRange().createContextualFragment(out);
 
-    exprs.forEach((expr, i) => {
-      if (typeof expr === 'object' || typeof expr === 'function') {
-        const toReplace = fragment.querySelector(`.${BIND_PREFIX}${i}`);
-        if (toReplace) {
-          if (!expr.nodeType) {
-            expr.lemnRef = {...expr.lemnRef, lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}};
-            fragment.lemnPrivateComponents = [...(fragment.lemnPrivateComponents || []), expr];
-          } else {
-            replace({lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}}, expr);
-          }
-        } else {
-          Array.from(fragment.querySelectorAll('*')).some(el => {
-            return Array.from(el.attributes).some(attr => {
-              if (attr.value === `<link class=${BIND_PREFIX}${i}>`) {
-                const attrName = attr.name === 'class' ? 'className' : attr.name;
-                if (expr.render) {
-                  expr.lemnRef = {lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}};
-                  fragment.lemnPrivateComponents = [...(fragment.lemnPrivateComponents || []), expr];
+          exprs.forEach((expr, i) => {
+            if (typeof expr === 'object' || typeof expr === 'function') {
+              const toReplace = content.querySelector(`.${BIND_PREFIX}${i}`);
+              if (toReplace) {
+                if (!expr.nodeType) {
+                  expr.lemnRef = {...expr.lemnRef, lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}};
+                  content.lemnPrivateComponents = [...(content.lemnPrivateComponents || []), expr];
                 } else {
-                  replaceAttr({lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}}, expr);
+                  replace({lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}}, expr.cloneNode(true));
                 }
-                return true;
+              } else {
+                Array.from(content.querySelectorAll('*')).some(el => {
+                  return Array.from(el.attributes).some(attr => {
+                    if (attr.value === `<link class=${BIND_PREFIX}${i}>`) {
+                      const attrName = attr.name === 'class' ? 'className' : attr.name;
+                      if (expr.render) {
+                        expr.lemnRef = {lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}};
+                        content.lemnPrivateComponents = [...(content.lemnPrivateComponents || []), expr];
+                      } else {
+                        replaceAttr({lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}}, expr);
+                      }
+                      return true;
+                    }
+                  });
+                });
               }
-            });
+            }
           });
         }
+
+        return content;
       }
     });
 
-    return fragment;
+    return exprs;
   }
 
   function toFragment (replaceWith) {
       if (replaceWith.nodeType) {
           return replaceWith;
       }
-      return h`${replaceWith}`;
+      return h`${replaceWith}`.content;
   }
 
   function maybeCall (fn, _this) {
@@ -152,7 +161,7 @@ var lemn = (function (exports) {
           (fragment.lemnPrivateComponents || []).forEach(v => !(expr.lemnRef.lemnPrivateComponents || []).includes(v) && didAttach(v));
           expr.lemnRef.lemnPrivateComponents = (fragment.lemnPrivateComponents || []);
 
-          replace(expr.lemnRef, fragment);
+          replace(expr.lemnRef, fragment.cloneNode(true));
           fragment.lemnRef = expr.lemnRef;
         }
       }
@@ -177,7 +186,7 @@ var lemn = (function (exports) {
    * @param {Component} component - component to render
    */
   function attach(root, expr) {
-      root.appendChild(h`${expr}`);
+      root.appendChild(toFragment(expr));
       performRender(expr);
       didAttach(expr);
   }
@@ -189,4 +198,4 @@ var lemn = (function (exports) {
   return exports;
 
 }({}));
-//# sourceMappingURL=web.lite.js.map
+//# sourceMappingURL=lemn.lite.js.map

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Bond - Documentation</title>
+    <title>component.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,136 +29,53 @@
 
 <div id="main">
     
-    <h1 class="page-title">Bond</h1>
+    <h1 class="page-title">component.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-        Bond
-        </h2>
-        
-            <div class="class-description">A function bonded a Model or other Bond parent. Changes are pushed from
-parent to child. Using a Bond in a `h` tagged template string will
-automatically rerender when its function returns a new value from its parent
-Model or Bond.</div>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * A lemn component.
+ *
+ * A component in lemn is any object with a `render` method. A component does
+ * not need to explicitly subclass this class.
+ *
+ * @class Component
+ */
 
-<article>
-    <div class="container-overview">
-    
-        
-<div class="section-method">
+/**
+ * @method willRender
+ * @memberof Component#
+ */
 
-    
-    <h2>Constructor</h2>
-    
+/**
+ * @method didRender
+ * @memberof Component#
+ */
 
-    <h4 class="name" id="Bond"><span class="type-signature"></span>new Bond<span class="signature">()</span><span class="type-signature"></span></h4>
+/**
+ * @method willDetach
+ * @memberof Component#
+ */
 
-    
+/**
+ * @method didAttach
+ * @memberof Component#
+ */
 
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bond.js.html">bond.js</a>, <a href="bond.js.html#line9">line 9</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+/**
+ * Render a visualization of this component with `h`.
+ * @method render
+ * @memberof Component#
+ */
+</code></pre>
+        </article>
+    </section>
 
 
 

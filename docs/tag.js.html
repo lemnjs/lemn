@@ -2,22 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: tag.js</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>tag.js - Documentation</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Source: tag.js</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Bond.html">Bond</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Component.html">Component</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Component.html#didAttach">didAttach</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Component.html#didRender">didRender</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Component.html#render">render</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Component.html#willDetach">willDetach</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Component.html#willRender">willRender</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Model.html">Model</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Store.html">Store</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#attach">attach</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#detach">detach</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#h">h</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#rerender">rerender</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">tag.js</h1>
+    
 
     
 
@@ -105,44 +118,53 @@ const BIND_PREFIX = 'lemn';
 function h (strings, ..._exprs) {
   const exprs = [strings[0], ...flatten(_exprs.map((expr, i) => [expr, strings[i + 1]]))];
 
-  const out = exprs.map((expr, i) => (
-    (typeof expr === 'object' || typeof expr === 'function') ?
-      `&lt;link class=${BIND_PREFIX}${i}>` :
-      expr
-  )).join('') || ' ';
+  let content;
+  Object.defineProperty(exprs, 'content', {
+    get () {
+      if (!content) {
+        const out = exprs.map((expr, i) => (
+          (typeof expr === 'object' || typeof expr === 'function') ?
+            `&lt;link class=${BIND_PREFIX}${i}>` :
+            expr
+        )).join('') || ' ';
 
-  const fragment = document.createRange().createContextualFragment(out);
+        content = document.createRange().createContextualFragment(out);
 
-  exprs.forEach((expr, i) => {
-    if (typeof expr === 'object' || typeof expr === 'function') {
-      const toReplace = fragment.querySelector(`.${BIND_PREFIX}${i}`);
-      if (toReplace) {
-        if (!expr.nodeType) {
-          expr.lemnRef = {...expr.lemnRef, lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}};
-          fragment.lemnPrivateComponents = [...(fragment.lemnPrivateComponents || []), expr];
-        } else {
-          replace({lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}}, expr);
-        }
-      } else {
-        Array.from(fragment.querySelectorAll('*')).some(el => {
-          return Array.from(el.attributes).some(attr => {
-            if (attr.value === `&lt;link class=${BIND_PREFIX}${i}>`) {
-              const attrName = attr.name === 'class' ? 'className' : attr.name;
-              if (expr.render) {
-                expr.lemnRef = {lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}};
-                fragment.lemnPrivateComponents = [...(fragment.lemnPrivateComponents || []), expr];
+        exprs.forEach((expr, i) => {
+          if (typeof expr === 'object' || typeof expr === 'function') {
+            const toReplace = content.querySelector(`.${BIND_PREFIX}${i}`);
+            if (toReplace) {
+              if (!expr.nodeType) {
+                expr.lemnRef = {...expr.lemnRef, lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}};
+                content.lemnPrivateComponents = [...(content.lemnPrivateComponents || []), expr];
               } else {
-                replaceAttr({lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}}, expr);
+                replace({lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}}, expr.cloneNode(true));
               }
-              return true;
+            } else {
+              Array.from(content.querySelectorAll('*')).some(el => {
+                return Array.from(el.attributes).some(attr => {
+                  if (attr.value === `&lt;link class=${BIND_PREFIX}${i}>`) {
+                    const attrName = attr.name === 'class' ? 'className' : attr.name;
+                    if (expr.render) {
+                      expr.lemnRef = {lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}};
+                      content.lemnPrivateComponents = [...(content.lemnPrivateComponents || []), expr];
+                    } else {
+                      replaceAttr({lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}}, expr);
+                    }
+                    return true;
+                  }
+                });
+              });
             }
-          });
+          }
         });
       }
+
+      return content;
     }
   });
 
-  return fragment;
+  return exprs;
 }
 
 export {
@@ -163,17 +185,13 @@ export {
 
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Bond.html">Bond</a></li><li><a href="Model.html">Model</a></li><li><a href="Store.html">Store</a></li></ul><h3>Global</h3><ul><li><a href="global.html#attach">attach</a></li><li><a href="global.html#detach">detach</a></li><li><a href="global.html#h">h</a></li><li><a href="global.html#rerender">rerender</a></li></ul>
-</nav>
-
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Jan 14 2019 02:12:41 GMT-0500 (Eastern Standard Time)
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Jan 25 2019 14:10:43 GMT-0500 (Eastern Standard Time) using the Minami theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>
