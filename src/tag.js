@@ -77,47 +77,49 @@ const BIND_PREFIX = 'lemn';
 function h (strings, ..._exprs) {
   const exprs = [strings[0], ...flatten(_exprs.map((expr, i) => [expr, strings[i + 1]]))];
 
-  let content;
+  let template;
   Object.defineProperty(exprs, 'content', {
     get () {
-      if (!content) {
+      if (!template) {
         const out = exprs.map((expr, i) => (
           (typeof expr === 'object' || typeof expr === 'function') ?
             `<link class=${BIND_PREFIX}${i}>` :
             expr
         )).join('') || ' ';
 
-        content = document.createRange().createContextualFragment(out);
-
-        exprs.forEach((expr, i) => {
-          if (typeof expr === 'object' || typeof expr === 'function') {
-            const toReplace = content.querySelector(`.${BIND_PREFIX}${i}`);
-            if (toReplace) {
-              if (!expr.nodeType) {
-                expr.lemnRef = {...expr.lemnRef, lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}};
-                content.lemnPrivateComponents = [...(content.lemnPrivateComponents || []), expr];
-              } else {
-                replace({lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}}, expr.cloneNode(true));
-              }
-            } else {
-              Array.from(content.querySelectorAll('*')).some(el => {
-                return Array.from(el.attributes).some(attr => {
-                  if (attr.value === `<link class=${BIND_PREFIX}${i}>`) {
-                    const attrName = attr.name === 'class' ? 'className' : attr.name;
-                    if (expr.render) {
-                      expr.lemnRef = {lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}};
-                      content.lemnPrivateComponents = [...(content.lemnPrivateComponents || []), expr];
-                    } else {
-                      replaceAttr({lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}}, expr);
-                    }
-                    return true;
-                  }
-                });
-              });
-            }
-          }
-        });
+        template = document.createRange().createContextualFragment(out);
       }
+
+      const content = template.cloneNode(true);
+
+      exprs.forEach((expr, i) => {
+        if (typeof expr === 'object' || typeof expr === 'function') {
+          const toReplace = content.querySelector(`.${BIND_PREFIX}${i}`);
+          if (toReplace) {
+            if (!expr.nodeType) {
+              expr.lemnRef = {...expr.lemnRef, lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}};
+              content.lemnPrivateComponents = [...(content.lemnPrivateComponents || []), expr];
+            } else {
+              replace({lemnPrivateStart: {lemnPrivateDom: toReplace}, lemnPrivateEnd: {lemnPrivateDom: toReplace}}, expr);
+            }
+          } else {
+            Array.from(content.querySelectorAll('*')).some(el => {
+              return Array.from(el.attributes).some(attr => {
+                if (attr.value === `<link class=${BIND_PREFIX}${i}>`) {
+                  const attrName = attr.name === 'class' ? 'className' : attr.name;
+                  if (expr.render) {
+                    expr.lemnRef = {lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}};
+                    content.lemnPrivateComponents = [...(content.lemnPrivateComponents || []), expr];
+                  } else {
+                    replaceAttr({lemnPrivateAttr: {lemnPrivateDom: el, lemnPrivateName: attrName}}, expr);
+                  }
+                  return true;
+                }
+              });
+            });
+          }
+        }
+      });
 
       return content;
     }

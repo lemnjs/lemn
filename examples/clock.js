@@ -1,4 +1,4 @@
-import {h, attach, Model} from '..';
+import {h, attach, Model} from '../index';
 
 const time = new Model(new Date());
 setInterval(() => time.set(new Date()), 87);

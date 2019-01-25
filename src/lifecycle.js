@@ -26,15 +26,13 @@ function performRender (expr) {
       replaceAttr(expr.lemnRef, expr.render() || '');
     } else {
       const fragment = toFragment(expr.render() || ' ');
-      if (!fragment.lemnRef) {
-        (expr.lemnRef.lemnPrivateComponents || []).forEach(v => !(fragment.lemnPrivateComponents || []).includes(v) && willDetach(v));
-        (fragment.lemnPrivateComponents || []).forEach(component => performRender(component));
-        (fragment.lemnPrivateComponents || []).forEach(v => !(expr.lemnRef.lemnPrivateComponents || []).includes(v) && didAttach(v));
-        expr.lemnRef.lemnPrivateComponents = (fragment.lemnPrivateComponents || []);
 
-        replace(expr.lemnRef, fragment.cloneNode(true));
-        fragment.lemnRef = expr.lemnRef;
-      }
+      (expr.lemnRef.lemnPrivateComponents || []).forEach(v => !(fragment.lemnPrivateComponents || []).includes(v) && willDetach(v));
+      (fragment.lemnPrivateComponents || []).forEach(component => performRender(component));
+      (fragment.lemnPrivateComponents || []).forEach(v => !(expr.lemnRef.lemnPrivateComponents || []).includes(v) && didAttach(v));
+      expr.lemnRef.lemnPrivateComponents = (fragment.lemnPrivateComponents || []);
+
+      replace(expr.lemnRef, fragment);
     }
 
     maybeCall(expr.didRender, expr);
