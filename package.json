@@ -1,8 +1,8 @@
 {
   "name": "lemn",
   "version": "0.3.0",
-  "main": "dist/index.cjs.min.js",
-  "module": "dist/index.min.js",
+  "main": "npm/index.cjs.min.js",
+  "module": "npm/index.min.js",
   "description": "",
   "license": "MIT",
   "devDependencies": {
@@ -34,22 +34,22 @@
     "webpack-visualizer-plugin": "^0.1.11"
   },
   "files": [
-    "dist/index.cjs.js",
-    "dist/index.cjs.js.map",
-    "dist/index.cjs.min.js",
-    "dist/index.cjs.min.js.map",
-    "dist/index.js",
-    "dist/index.js.map",
-    "dist/index.min.js",
-    "dist/index.min.js.map"
+    "npm/index.cjs.js",
+    "npm/index.cjs.js.map",
+    "npm/index.cjs.min.js",
+    "npm/index.cjs.min.js.map",
+    "npm/index.js",
+    "npm/index.js.map",
+    "npm/index.min.js",
+    "npm/index.min.js.map"
   ],
   "directories": {},
   "scripts": {
     "build": "npm run build:lite:web && npm run build:full:cjs && npm run build:full:web && npm run build:full:esm && npm run build:examples && npm run build:docs",
-    "build:full:cjs": "mkdirp dist && rollup -m -f cjs index.js --file npm/index.cjs.js && terser --ecma 8 --module --mangle --compress --mangle-props regex=/^lemnPrivate/ npm/index.cjs.js --output npm/index.cjs.min.js --source-map url=npm.cjs.min.js.map,includeSources,content=dist/npm.cjs.js.map",
-    "build:full:esm": "mkdirp dist && rollup -m -f esm index.js --file npm/index.js && terser --ecma 8 --module --mangle --compress --mangle-props regex=/^lemnPrivate/ npm/index.js --output npm/index.min.js --source-map url=npm.min.js.map,includeSources,content=dist/npm.js.map",
-    "build:full:web": "mkdirp dist && rollup -m -f iife -n lemn index.js --file dist/lemn.js && terser --ecma 8 --mangle --compress --mangle-props regex=/^lemnPrivate/  dist/lemn.js --output dist/lemn.min.js --source-map url=lemn.min.js.map,includeSources,content=dist/lemn.js.map && mkdir dist/$npm_package_version && cp dist/lemn.js dist/lemn.js.map dist/lemn.min.js dist/lemn.min.js.map dist/$npm_package_version",
-    "build:lite:web": "mkdirp dist && rollup -m -f iife -n lemn lite.js --file dist/lemn.lite.js && terser --ecma 8 --mangle --compress --mangle-props regex=/^lemnPrivate/ dist/lemn.lite.js --output dist/lemn.lite.min.js --source-map url=lemn.lite.min.js.map,includeSources,content=dist/lemn.lite.js.map && mkdir dist/$npm_package_version && cp dist/lemn.lite.js dist/lemn.lite.js.map dist/lemn.lite.min.js dist/lemn.lite.min.js.map dist/$npm_package_version",
+    "build:full:cjs": "mkdirp dist && rollup -m -f cjs index.js --file npm/index.cjs.js && terser --ecma 8 --module --mangle --compress --mangle-props regex=/^lemnPrivate/ npm/index.cjs.js --output npm/index.cjs.min.js --source-map url=index.cjs.min.js.map,includeSources,content=npm/index.cjs.js.map",
+    "build:full:esm": "mkdirp dist && rollup -m -f esm index.js --file npm/index.js && terser --ecma 8 --module --mangle --compress --mangle-props regex=/^lemnPrivate/ npm/index.js --output npm/index.min.js --source-map url=index.min.js.map,includeSources,content=npm/index.js.map",
+    "build:full:web": "mkdirp -p dist/$npm_package_version && rollup -m -f iife -n lemn index.js --file dist/lemn.js && terser --ecma 8 --mangle --compress --mangle-props regex=/^lemnPrivate/  dist/lemn.js --output dist/lemn.min.js --source-map url=lemn.min.js.map,includeSources,content=dist/lemn.js.map && cp dist/lemn.js dist/lemn.js.map dist/lemn.min.js dist/lemn.min.js.map dist/$npm_package_version",
+    "build:lite:web": "mkdirp -p dist/$npm_package_version && rollup -m -f iife -n lemn lite.js --file dist/lemn.lite.js && terser --ecma 8 --mangle --compress --mangle-props regex=/^lemnPrivate/ dist/lemn.lite.js --output dist/lemn.lite.min.js --source-map url=lemn.lite.min.js.map,includeSources,content=dist/lemn.lite.js.map && cp dist/lemn.lite.js dist/lemn.lite.js.map dist/lemn.lite.min.js dist/lemn.lite.min.js.map dist/$npm_package_version",
     "build:examples": "NODE_ENV=production webpack --config examples/webpack.config.js",
     "build:docs": "jsdoc src --template node_modules/minami -d dist/docs README.md",
     "start": "webpack-dev-server --config examples/webpack.config.js",
