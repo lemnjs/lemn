@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/mzgoddard/lemn/compare/v0.3.0...v0.4.0) (2019-01-25)
+
+
+### Bug Fixes
+
+* add versions list to index ([24479d1](https://github.com/mzgoddard/lemn/commit/24479d1))
+* collect nested template tagged components ([3a3c353](https://github.com/mzgoddard/lemn/commit/3a3c353))
+* correct the basic example ([9ba5cd5](https://github.com/mzgoddard/lemn/commit/9ba5cd5))
+* replace a components render with a clone of its fragment ([19937ea](https://github.com/mzgoddard/lemn/commit/19937ea))
+
+
+### Features
+
+* create fragment on demand ([0ab2c7c](https://github.com/mzgoddard/lemn/commit/0ab2c7c))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/mzgoddard/lemn/compare/v0.0.1...v0.3.0) (2019-01-14)
 

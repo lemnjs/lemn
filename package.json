@@ -1,6 +1,6 @@
 {
   "name": "lemn",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "npm/index.cjs.min.js",
   "module": "npm/index.min.js",
   "description": "",
