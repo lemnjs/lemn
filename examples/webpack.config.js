@@ -3,6 +3,15 @@ const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
+const VERSIONS = ['0.3.1', '0.3.0'];
+
+if (
+  process.env.npm_package_version &&
+  !VERSIONS.includes(process.env.npm_package_version)
+) {
+  throw new Error('Current version must be represented in list of VERSIONS.');
+}
+
 const files = fs.readdirSync(__dirname)
 .filter(name => !/webpack/.test(name))
 .filter(name => /\.js$/.test(name))
@@ -46,6 +55,7 @@ module.exports = files.map(name => ({
     }),
     new (require('webpack').DefinePlugin)({
       FILES: JSON.stringify(files),
+      VERSIONS: JSON.stringify(VERSIONS),
       process: {
         env: {
           NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
